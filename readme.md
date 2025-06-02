@@ -50,7 +50,7 @@ docker build -t majsoul-bot .
 
 ```bash
 docker run -d \
-  -e USER1_ACCOUNT_PASSWORD="your_account1&your_password1#your_account2&your_password2" \
+  -e USER_ACCOUNTS="your_account1&your_password1#your_account2&your_password2" \
   --name majsoul-bot \
   majsoul-bot
 ```
