@@ -42,14 +42,29 @@ def start_virtual_display():
 # 使用 Selenium 创建 Chrome 驱动
 def create_driver():
     options = Options()
-    options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--headless=new")  # 如需 headless 可启用
+    options.add_argument("--headless=new")
+    options.add_argument("--window-size=1920,1080")
+    
+    # WebGL相关配置
+    options.add_argument("--enable-webgl")
+    options.add_argument("--use-gl=angle")
+    options.add_argument("--use-angle=swiftshader")
+    options.add_argument("--enable-accelerated-2d-canvas")
+    options.add_argument("--enable-unsafe-swiftshader")
     options.add_argument("--ignore-gpu-blocklist")
+    options.add_argument("--ignore-gpu-blacklist")
+    options.add_argument("--disable-gpu-sandbox")
+    
+    # 其他稳定性配置
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-infobars")
-    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-web-security")
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    
+    # 用户代理
+    options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
 
     return webdriver.Chrome(options=options)
 
@@ -108,7 +123,7 @@ def click_element(driver, screenshot_path, template_path):
     pos = multi_scale_template_match(screenshot_path, template_path)
     if pos:
         devtools_click(driver, pos[0], pos[1])
-        time.sleep(2)  # 等待切换完成
+        time.sleep(20)  # 等待切换完成
     else:
         logging.error("❌ 未找到位置，详情查看截图")
         driver.save_screenshot("error_screenshot.png")
@@ -125,14 +140,14 @@ def login(driver, screenshot_path, account_template, password_template, login_te
 
     click_element(driver, screenshot_path, account_template)
     driver.execute_cdp_cmd("Input.insertText", {"text": account})
-    time.sleep(2)
+    time.sleep(20)
 
     click_element(driver, screenshot_path, password_template)
     driver.execute_cdp_cmd("Input.insertText", {"text": password})
-    time.sleep(2)
+    time.sleep(20)
 
     click_element(driver, screenshot_path, login_template)
-    time.sleep(30)  # 等待登录完成
+    time.sleep(120)  # 等待登录完成
     logging.info(f"✅ 用户 {account} 登录成功")
     send_notification(message=f"用户 {account} 登录成功")
 
@@ -148,7 +163,7 @@ def main():
         WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.TAG_NAME, "canvas"))
         )
-        time.sleep(30)  # 等待渲染
+        time.sleep(120)  # 等待渲染
 
         sources_path = "sources"
         if not os.path.exists(sources_path):
