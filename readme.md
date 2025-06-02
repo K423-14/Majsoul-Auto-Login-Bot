@@ -1,4 +1,3 @@
-
 ---
 
 ## 🀄 Majsoul Auto Login Bot
@@ -34,13 +33,20 @@
 
 ### 🚀 快速开始
 
-#### 1. 构建镜像
+#### 1. 克隆项目
+
+```bash
+git clone https://github.com/K423-14/Majsoul-Auto-Login-Bot.git
+cd Majsoul-Auto-Login-Bot
+```
+
+#### 2. 构建镜像
 
 ```bash
 docker build -t majsoul-bot .
 ```
 
-#### 2. 运行容器
+#### 3. 运行容器
 
 ```bash
 docker run -d \
