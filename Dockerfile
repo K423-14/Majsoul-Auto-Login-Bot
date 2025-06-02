@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 # 安装必要依赖（不包含 chromium 本体）
 RUN apt-get update && apt-get install -y \
-    xvfb wget curl unzip fonts-liberation libnss3 libxss1 libasound2 \
+    xvfb cron wget curl unzip fonts-liberation libnss3 libxss1 libasound2 \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
